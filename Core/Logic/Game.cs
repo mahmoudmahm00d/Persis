@@ -9,6 +9,7 @@ public class Game(GameModel initialModel)
     public GameModel Model { get; set; } = initialModel;
     public int Player { get; set; } = Probability.SelectPlayer();
     public List<int> CurrentRolls { get; set; } = [];
+    public bool PrintDetailed { get; set; }
 
     public void MoveToken(List<Tuple<int, int>> tokensMoves)
     {
@@ -21,15 +22,24 @@ public class Game(GameModel initialModel)
 
         CurrentRolls.Clear();
     }
-
     public void Roll()
     {
+        Roll(3);
+    }
+
+    public void Roll(int times)
+    {
+        if (times <= 0)
+        {
+            return;
+        }
+
         int roll = Probability.Roll();
         CurrentRolls.Add(roll);
         if (roll == 1 || roll == 5) // Pang or Dist
         {
             CurrentRolls.Add(7); // Khal 😅
-            Roll();
+            Roll(times - 1);
         }
     }
 
@@ -43,7 +53,12 @@ public class Game(GameModel initialModel)
             ConsoleHelper.PrintWithColor(ConsoleHelper.Line, ConsoleHelper.Yellow);
             ConsoleHelper.PrintWithColor($"{(Player == 1 ? "Player" : "Computer")} Turn\n", Player == 1 ? ConsoleHelper.Green : ConsoleHelper.Green);
             ConsoleHelper.PrintWithColor($"Roll Result: {string.Join($"{ConsoleHelper.Yellow},{ConsoleHelper.Blue}", CurrentRolls.Select((item, index) => $"[{ConsoleHelper.Yellow}({index + 1}){ConsoleHelper.Blue}:{item.ToProbability()}]"))}\n", ConsoleHelper.Blue);
-            ConsoleHelper.PrintWithColor(ConsoleHelper.Line, ConsoleHelper.Yellow);
+            if (PrintDetailed)
+            {
+                ConsoleHelper.PrintWithColor(ConsoleHelper.Line, ConsoleHelper.Green);
+                ConsoleHelper.PrintWithColor($"Game Evaluation: {Heuristic.Evaluate(Model)}\n", ConsoleHelper.Blue);
+                ConsoleHelper.PrintWithColor(ConsoleHelper.Line, ConsoleHelper.Green);
+            }
 
             int rollChoice = 1;
             if (CurrentRolls.Count > 1)
@@ -91,6 +106,11 @@ public class Game(GameModel initialModel)
                 Player = Player == 1 ? 2 : 1;
                 Roll();
             }
+        }
+
+        if (PrintDetailed)
+        {
+            ConsoleHelper.PrintAllMoves(Model);
         }
     }
 

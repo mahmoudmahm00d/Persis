@@ -2,10 +2,12 @@
 using Persis.Core.Models;
 using Persis.Presentation;
 
+ConsoleHelper.PrintWithColor("** Welcome to Persis **\n", ConsoleHelper.Green);
+
 GameModel model = new();
-// ConsoleHelper.Display(model);
 Game game = new(model);
-// game.Roll();
+Console.Write("Print Detailed? ");
+game.PrintDetailed = ConsoleInputHelper.ReadPlayerInput(0, 1) == 1;
 game.Play();
 
 // var jsonOptions = new System.Text.Json.JsonSerializerOptions { WriteIndented = true };

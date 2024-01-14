@@ -1,3 +1,5 @@
+using Persis.Core.Models;
+
 namespace Persis.Core.Logic;
 
 public static class Probability
@@ -110,6 +112,26 @@ public static class Probability
             5 => "Pang (5) (25 moves)",
             6 => "Shaka (6) (6 moves)",
             7 => "Khal (*) (1 moves)",
+            _ => throw new Exception("Invalid number")
+        };
+    }
+
+    public static List<int> Chances()
+    {
+        return [0, 1, 2, 3, 4, 5, 6];
+    }
+
+    public static double ToChance(int number)
+    {
+        return number switch
+        {
+            0 => 1 / 64, // Para
+            1 => 6 / 64, // Dist 10 + 1
+            2 => 15 / 64, // Duo
+            3 => 20 / 64, // Trio
+            4 => 15 / 64, // Quad
+            5 => 6 / 64, // Pang 25 + 1
+            6 => 1 / 64, // Shaka
             _ => throw new Exception("Invalid number")
         };
     }

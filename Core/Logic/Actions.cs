@@ -79,33 +79,36 @@ public class Actions
         // Clone current state
         var newState = new GameModel(state);
         // Get the toke form newState
+        Token newToken;
         if (token.Player == 1)
         {
-            token = newState.PlayerOneTokens.First(item => item.Equals(token));
+            newToken = newState.PlayerOneTokens.First(item => item.Equals(token));
         }
         else
         {
-            token = newState.PlayerTwoTokens.First(item => item.Equals(token));
+            newToken = newState.PlayerTwoTokens.First(item => item.Equals(token));
         }
 
-        var cell = GetCell(state, token.Player, token.MovesCount, token.MovesCount);
+        var cell = GetCell(state, newToken.Player, newToken.MovesCount, newToken.MovesCount);
 
         // Do not check if it is entering the board
-        if (token.MovesCount != 0)
+        if (newToken.MovesCount != 0)
         {
-            if (!cell!.Tokens.Contains(token))
+            if (!cell!.Tokens.Contains(newToken))
             {
                 throw new Exception("InvalidToken");
             }
         }
 
-        var finished = MoveToken(newState, token, movesCount);
-        // Add to kitchen if token walk on all the board
+        var finished = MoveToken(newState, newToken, movesCount);
+        // Add to kitchen if newToken walk on all the board
         if (finished)
         {
-            newState.TokensInKitchen.Add(token);
+            newState.TokensInKitchen.Add(newToken);
         }
 
+
+        newState.Move = $"{token} from {token.MovesCount} to {newToken.MovesCount}";
         newState.Previous = state;
         return newState;
     }
@@ -113,7 +116,7 @@ public class Actions
     private static bool MoveToken(GameModel model, Token token, int movesCount)
     {
         var originCell = GetCell(model, token.Player, token.MovesCount, token.MovesCount);
-        var cell = GetCell(model, token.Player, (movesCount == 0 ? 1 : 0) + token.MovesCount, token.MovesCount);
+        var cell = GetCell(model, token.Player, (movesCount == 0 ? 1 : movesCount) + token.MovesCount, token.MovesCount);
 
         if (cell == null)
         {
@@ -150,6 +153,7 @@ public class Actions
         {
             originCell!.Tokens.Remove(token);
             token.MovesCount += movesCount;
+            tokens.ForEach(item => item.MovesCount = 0);
             tokens.Clear();
             tokens.Add(token);
             return false;

@@ -144,4 +144,19 @@ public class ConsoleHelper
         );
         Console.WriteLine();
     }
+
+    public static void PrintAllMoves(GameModel model)
+    {
+        Stack<string> stack = new();
+        var currentModel = model;
+        while (currentModel is not null)
+        {
+            stack.Push(currentModel.Move ?? string.Empty);
+        }
+
+        while (stack.Count != 0)
+        {
+            Console.WriteLine(stack.Pop());
+        }
+    }
 }

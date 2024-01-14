@@ -8,6 +8,9 @@ public class GameModel
 {
 	private const int BOARD_SIZE = 82;
 
+	public string? Move { get; set; }
+	public int Player { get; set; }
+
 	public List<Cell> Board { get; set; } = new(BOARD_SIZE);
 	public List<Token> PlayerOneTokens { get; set; } = [];
 	public List<Token> PlayerTwoTokens { get; set; } = [];
@@ -127,5 +130,25 @@ public class GameModel
 		}
 
 		return text.ToString();
+	}
+
+	public bool IsGameOver()
+	{
+		int playerOneTokensInKitchen = 0;
+		int playerTwoTokensInKitchen = 0;
+		foreach (var token in TokensInKitchen)
+		{
+			if (token.Player == 1)
+			{
+				playerOneTokensInKitchen++;
+			}
+			else
+			{
+				playerTwoTokensInKitchen++;
+			}
+		}
+
+		bool isGameOver = playerOneTokensInKitchen == 4 || playerTwoTokensInKitchen == 4;
+		return isGameOver;
 	}
 }
