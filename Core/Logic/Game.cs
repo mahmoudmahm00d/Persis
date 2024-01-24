@@ -16,12 +16,14 @@ public class Game(GameModel initialModel)
         List<GameModel> newStates = [];
         foreach (var item in tokensMoves)
         {
-            var token = Player == 1 ? Model.PlayerOneTokens[item.Item1] : Model.PlayerTwoTokens[item.Item2];
+            var token =
+                Player == 1 ? Model.PlayerOneTokens[item.Item1] : Model.PlayerTwoTokens[item.Item2];
             newStates.Add(Actions.Move(Model, token, item.Item2));
         }
 
         CurrentRolls.Clear();
     }
+
     public void Roll()
     {
         Roll(3);
@@ -51,12 +53,21 @@ public class Game(GameModel initialModel)
             ConsoleHelper.PrintWithColor(ConsoleHelper.Line, ConsoleHelper.Yellow);
             ConsoleHelper.Display(Model);
             ConsoleHelper.PrintWithColor(ConsoleHelper.Line, ConsoleHelper.Yellow);
-            ConsoleHelper.PrintWithColor($"{(Player == 1 ? "Player" : "Computer")} Turn\n", Player == 1 ? ConsoleHelper.Green : ConsoleHelper.Green);
-            ConsoleHelper.PrintWithColor($"Roll Result: {string.Join($"{ConsoleHelper.Yellow},{ConsoleHelper.Blue}", CurrentRolls.Select((item, index) => $"[{ConsoleHelper.Yellow}({index + 1}){ConsoleHelper.Blue}:{item.ToProbability()}]"))}\n", ConsoleHelper.Blue);
+            ConsoleHelper.PrintWithColor(
+                $"{(Player == 1 ? "Player" : "Computer")} Turn\n",
+                Player == 1 ? ConsoleHelper.Green : ConsoleHelper.Green
+            );
+            ConsoleHelper.PrintWithColor(
+                $"Roll Result: {string.Join($"{ConsoleHelper.Yellow},{ConsoleHelper.Blue}", CurrentRolls.Select((item, index) => $"[{ConsoleHelper.Yellow}({index + 1}){ConsoleHelper.Blue}:{item.ToProbability()}]"))}\n",
+                ConsoleHelper.Blue
+            );
             if (PrintDetailed)
             {
                 ConsoleHelper.PrintWithColor(ConsoleHelper.Line, ConsoleHelper.Green);
-                ConsoleHelper.PrintWithColor($"Game Evaluation: {Heuristic.Evaluate(Model)}\n", ConsoleHelper.Blue);
+                ConsoleHelper.PrintWithColor(
+                    $"Game Evaluation: {Heuristic.Evaluate(Model)}\n",
+                    ConsoleHelper.Blue
+                );
                 ConsoleHelper.PrintWithColor(ConsoleHelper.Line, ConsoleHelper.Green);
             }
 
@@ -72,7 +83,10 @@ public class Game(GameModel initialModel)
             var tokensCanMove = Actions.TokensCanMove(Model, Player, roll.ToMovesCount());
             if (tokensCanMove.Count == 0 && CurrentRolls.Count > 1)
             {
-                ConsoleHelper.PrintWithColor("No tokens can move. Try different roll .\n", ConsoleHelper.Red);
+                ConsoleHelper.PrintWithColor(
+                    "No tokens can move. Try different roll .\n",
+                    ConsoleHelper.Red
+                );
                 continue;
             }
 
@@ -131,11 +145,7 @@ public class Game(GameModel initialModel)
         }
 
         bool isGameOver = playerOneTokensInKitchen == 4 || playerTwoTokensInKitchen == 4;
-        return new GameState(
-            isGameOver,
-            playerOneTokensInKitchen,
-            playerTwoTokensInKitchen
-        );
+        return new GameState(isGameOver, playerOneTokensInKitchen, playerTwoTokensInKitchen);
     }
 
     private List<Token> GetPlayerTokens()

@@ -107,7 +107,6 @@ public class Actions
             newState.TokensInKitchen.Add(newToken);
         }
 
-
         newState.Move = $"{token} from {token.MovesCount} to {newToken.MovesCount}";
         newState.Previous = state;
         return newState;
@@ -116,7 +115,12 @@ public class Actions
     private static bool MoveToken(GameModel model, Token token, int movesCount)
     {
         var originCell = GetCell(model, token.Player, token.MovesCount, token.MovesCount);
-        var cell = GetCell(model, token.Player, (movesCount == 0 ? 1 : movesCount) + token.MovesCount, token.MovesCount);
+        var cell = GetCell(
+            model,
+            token.Player,
+            (movesCount == 0 ? 1 : movesCount) + token.MovesCount,
+            token.MovesCount
+        );
 
         if (cell == null)
         {

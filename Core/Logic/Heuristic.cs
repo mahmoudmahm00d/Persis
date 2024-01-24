@@ -7,11 +7,11 @@ public class Heuristic
 {
     public static int Evaluate(GameModel model)
     {
-        int playerOneTokensInKitchenCount = model.TokensInKitchen
-            .Where(item => item.Player == 1)
+        int playerOneTokensInKitchenCount = model
+            .TokensInKitchen.Where(item => item.Player == 1)
             .Count();
-        int playerTwoTokensInKitchenCount = model.TokensInKitchen
-            .Where(item => item.Player == 2)
+        int playerTwoTokensInKitchenCount = model
+            .TokensInKitchen.Where(item => item.Player == 2)
             .Count();
 
         if (model.IsGameOver() && playerOneTokensInKitchenCount == 4)

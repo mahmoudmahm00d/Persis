@@ -17,7 +17,7 @@ public class ExpectiMax
         {
             // foreach (var item in Probability.Chances().Select(item => new GameNode{}))
             // {
-                
+
             // }
         }
 
